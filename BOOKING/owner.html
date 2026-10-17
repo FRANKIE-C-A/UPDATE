@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Owner Panel</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <div class="header-title" id="homeLink">
+                <i class="fas fa-bus"></i> Bus<span style="-webkit-text-fill-color: #ffd700;">Book</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div class="user-badge" id="userBadge" style="display:none;">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userBadgeName">Guest</span>
+                </div>
+                <button class="hamburger" id="hamburgerBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="index.html" class="menu-item"><i class="fas fa-home"></i> Home</a>
+            <a href="login.html" class="menu-item" id="menuLogin"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="#" class="menu-item" id="menuLogout" style="display:none;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <div class="dropdown-divider"></div>
+            <a href="book.html" class="menu-item"><i class="fas fa-ticket"></i> Book</a>
+            <a href="track.html" class="menu-item"><i class="fas fa-map-location-dot"></i> Track</a>
+            <a href="admin.html" class="menu-item" id="menuAdmin" style="display:none;"><i class="fas fa-user-shield"></i> Admin Panel</a>
+            <a href="driver.html" class="menu-item" id="menuDriver" style="display:none;"><i class="fas fa-steering-wheel"></i> Driver Panel</a>
+        </div>
+
+        <div class="card glass">
+            <div class="flex-between flex-wrap">
+                <div>
+                    <h3><i class="fas fa-crown" style="color:#ffd700;"></i> Owner Panel</h3>
+                    <p style="color:rgba(255,255,255,0.5);">Welcome, <span id="ownerWelcome">—</span></p>
+                </div>
+                <button class="btn-secondary" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card"><i class="fas fa-users"></i><span class="num" id="ownerTotalUsers">0</span><label>Users</label></div>
+            <div class="stat-card"><i class="fas fa-bus"></i><span class="num" id="ownerTotalDrivers">0</span><label>Drivers</label></div>
+            <div class="stat-card"><i class="fas fa-ticket"></i><span class="num" id="ownerTotalBookings">0</span><label>Bookings</label></div>
+            <div class="stat-card"><i class="fas fa-coins"></i><span class="num" id="ownerTotalRevenue">₱0</span><label>Total Revenue</label></div>
+        </div>
+
+        <div class="card glass">
+            <h4><i class="fas fa-building"></i> Companies (Admins)</h4>
+            <div id="companyList"></div>
+        </div>
+
+        <div id="companyDetailContainer" style="display:none;">
+            <div class="card glass">
+                <button class="btn-secondary" id="closeCompanyDetailBtn" style="float:right;">Close</button>
+                <h4 id="companyDetailTitle">Company: <span id="companyDetailName">—</span></h4>
+                <div class="stats-grid" style="grid-template-columns:1fr 1fr 1fr;">
+                    <div class="stat-card"><i class="fas fa-bus"></i><span class="num" id="companyDriverCount">0</span><label>Drivers</label></div>
+                    <div class="stat-card"><i class="fas fa-users"></i><span class="num" id="companyPassengerCount">0</span><label>Passengers</label></div>
+                    <div class="stat-card"><i class="fas fa-coins"></i><span class="num" id="companyRevenue">₱0</span><label>Revenue</label></div>
+                </div>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;margin:12px 0;">
+                    <button class="btn-secondary period-btn" data-period="day">Today</button>
+                    <button class="btn-secondary period-btn" data-period="month">This Month</button>
+                    <button class="btn-secondary period-btn" data-period="year">This Year</button>
+                    <button class="btn-secondary period-btn" data-period="all">All Time</button>
+                </div>
+                <div id="companyStatsDisplay">
+                    <p><strong>Period:</strong> <span id="companyPeriodLabel">All Time</span></p>
+                    <p><strong>Passengers:</strong> <span id="companyPeriodPassengers">0</span></p>
+                    <p><strong>Revenue:</strong> ₱<span id="companyPeriodRevenue">0</span></p>
+                </div>
+                <h5>Drivers in this company</h5>
+                <div class="table-wrap"><table><thead><tr><th>Name</th><th>Bus Plate</th><th>Route</th><th>Fare</th><th>Conductor</th></tr></thead><tbody id="companyDriversTable"></tbody></table></div>
+            </div>
+        </div>
+
+        <div class="card glass">
+            <h4><i class="fas fa-user-cog"></i> Manage Administrators</h4>
+            <form id="addAdminForm">
+                <div class="form-row">
+                    <div class="form-group"><label>Company Name *</label><input id="newAdminCompany" placeholder="Company name" required /></div>
+                    <div class="form-group"><label>Contact Person</label><input id="newAdminName" placeholder="Contact name" required /></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Location</label><input id="newAdminLocation" placeholder="City, address" required /></div>
+                    <div class="form-group"><label>Contact</label><input id="newAdminContact" placeholder="Phone / email" required /></div>
+                </div>
+                <div class="form-group">
+                    <label>Access Code (auto‑generated, hashed)</label>
+                    <input id="newAdminSpecialCode" type="text" placeholder="Will be auto‑generated" readonly style="background:rgba(255,255,255,0.05);" />
+                </div>
+                <button type="submit" class="btn-primary"><i class="fas fa-plus"></i> Add Admin</button>
+            </form>
+            <div class="table-wrap"><table><thead><tr><th>Company</th><th>Contact</th><th>Location</th><th>Contact Info</th><th>Code</th><th>Action</th></tr></thead><tbody id="ownerAdminsTable"></tbody></table></div>
+        </div>
+
+        <div class="card glass">
+            <h4><i class="fas fa-users"></i> All Users (IPs visible)</h4>
+            <div class="table-wrap"><table><thead><tr><th>Username</th><th>Role</th><th>IP Address</th><th>Action</th></tr></thead><tbody id="ownerUsersTable"></tbody></table></div>
+        </div>
+
+        <div class="card glass">
+            <h4><i class="fas fa-history"></i> All Booking History</h4>
+            <div class="table-wrap"><table><thead><tr><th>Passenger</th><th>Route</th><th>Fare</th><th>Status</th><th>Time</th><th>OTP</th></tr></thead><tbody id="ownerBookingsTable"></tbody></table></div>
+        </div>
+
+        <div class="card glass">
+            <h4><i class="fas fa-bus"></i> All Drivers &amp; Their Earnings</h4>
+            <div class="table-wrap"><table><thead><tr><th>Driver</th><th>Plate</th><th>Bus Type</th><th>Route</th><th>Fare</th><th>Conductor</th><th>Bookings</th><th>Earnings</th><th>Action</th></tr></thead><tbody id="ownerDriversTable"></tbody></table></div>
+        </div>
+    </div>
+
+    <script src="script.js" type="module"></script>
+    <script>
+        document.getElementById('homeLink').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+        document.getElementById('logoutBtn').addEventListener('click', logoutUser);
+        document.getElementById('closeCompanyDetailBtn').addEventListener('click', closeCompanyDetail);
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Driver Panel</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <div class="header-title" id="homeLink">
+                <i class="fas fa-bus"></i> Bus<span style="-webkit-text-fill-color: #ffd700;">Book</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div class="user-badge" id="userBadge" style="display:none;">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userBadgeName">Guest</span>
+                </div>
+                <button class="hamburger" id="hamburgerBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="index.html" class="menu-item"><i class="fas fa-home"></i> Home</a>
+            <a href="login.html" class="menu-item" id="menuLogin"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="#" class="menu-item" id="menuLogout" style="display:none;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <div class="dropdown-divider"></div>
+            <a href="book.html" class="menu-item"><i class="fas fa-ticket"></i> Book</a>
+            <a href="track.html" class="menu-item"><i class="fas fa-map-location-dot"></i> Track</a>
+            <a href="admin.html" class="menu-item" id="menuAdmin" style="display:none;"><i class="fas fa-user-shield"></i> Admin Panel</a>
+            <a href="owner.html" class="menu-item" id="menuOwner" style="display:none;"><i class="fas fa-crown"></i> Owner Panel</a>
+        </div>
+
+        <div class="card glass">
+            <div class="flex-between flex-wrap">
+                <div>
+                    <h3><i class="fas fa-steering-wheel"></i> Driver Panel</h3>
+                    <p style="color:rgba(255,255,255,0.5);">Welcome, <span id="driverWelcome">—</span></p>
+                    <p><i class="fas fa-bus"></i> Bus: <span id="driverBusDisplay">—</span> &nbsp;|&nbsp; <i class="fas fa-route"></i> Route: <span id="driverRouteDisplay">—</span></p>
+                    <p><i class="fas fa-user-tie"></i> Conductor: <span id="driverConductorDisplay">—</span></p>
+                </div>
+                <button class="btn-secondary" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+
+        <div class="card glass">
+            <h4><i class="fas fa-satellite-dish"></i> GPS Sharing</h4>
+            <p id="driverGpsStatus" style="color:rgba(255,255,255,0.6);">Waiting for GPS…</p>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
+                <button id="driverStartSharing" class="btn-success"><i class="fas fa-play"></i> Start Sharing</button>
+                <button id="driverStopSharing" class="btn-danger hidden"><i class="fas fa-stop"></i> Stop Sharing</button>
+            </div>
+        </div>
+
+        <div class="card glass">
+            <h4><i class="fas fa-users"></i> My Passengers (with Seat & Fare)</h4>
+            <ul class="passenger-list" id="driverPassengerList"></ul>
+        </div>
+    </div>
+
+    <script src="script.js" type="module"></script>
+    <script>
+        document.getElementById('homeLink').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+        document.getElementById('logoutBtn').addEventListener('click', logoutUser);
+        document.getElementById('driverStartSharing').addEventListener('click', startSharingLocation);
+        document.getElementById('driverStopSharing').addEventListener('click', stopSharingLocation);
+    </script>
+</body>
+</html>
