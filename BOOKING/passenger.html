@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book a Bus</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+    <div class="app">
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+        <div class="page-header">
+            <h2><i class="fas fa-ticket"></i> Book a Bus</h2>
+        </div>
+
+        <div class="card glass">
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Passenger Name</label>
+                    <input id="pName" placeholder="Enter your full name" required />
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-route"></i> Select Trip</label>
+                    <select id="pTrip" required>
+                        <option value="">— Select a trip —</option>
+                    </select>
+                </div>
+
+                <div class="info-row">
+                    <span><i class="fas fa-bus"></i> Bus Type: <strong id="selectedBusType">—</strong></span>
+                    <span><i class="fas fa-coins"></i> Fare: ₱<strong id="selectedFare">—</strong></span>
+                </div>
+
+                <p class="note"><i class="fas fa-info-circle"></i> Seats are assigned automatically based on availability.</p>
+
+                <button type="submit" class="btn-primary"><i class="fas fa-check"></i> Book Now</button>
+            </form>
+        </div>
+
+        <div id="confirmation" class="card glass hidden">
+            <div class="confirmation-badge"><i class="fas fa-check-circle"></i> Booked!</div>
+            <h3>Booking Confirmation</h3>
+            <div id="confirmText" class="confirm-details"></div>
+
+            <div class="info-box">
+                <h4><i class="fas fa-info-circle"></i> Driver Info</h4>
+                <p id="driverInfo">Waiting for driver assignment…</p>
+            </div>
+
+            <div class="info-box">
+                <h4><i class="fas fa-chair"></i> Seat Availability</h4>
+                <div id="seatGrid" class="seat-grid"></div>
+            </div>
+
+            <div class="info-box">
+                <h4><i class="fas fa-clock"></i> Estimated Arrival</h4>
+                <p id="etaText">Calculating ETA…</p>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

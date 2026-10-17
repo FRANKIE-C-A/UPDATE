@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Track Bus</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <div class="header-title" id="homeLink">
+                <i class="fas fa-bus"></i> Bus<span style="-webkit-text-fill-color: #ffd700;">Book</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div class="user-badge" id="userBadge" style="display:none;">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userBadgeName">Guest</span>
+                </div>
+                <button class="hamburger" id="hamburgerBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="index.html" class="menu-item"><i class="fas fa-home"></i> Home</a>
+            <a href="login.html" class="menu-item" id="menuLogin"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="#" class="menu-item" id="menuLogout" style="display:none;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <div class="dropdown-divider"></div>
+            <a href="book.html" class="menu-item"><i class="fas fa-ticket"></i> Book</a>
+            <a href="admin.html" class="menu-item" id="menuAdmin" style="display:none;"><i class="fas fa-user-shield"></i> Admin Panel</a>
+            <a href="driver.html" class="menu-item" id="menuDriver" style="display:none;"><i class="fas fa-steering-wheel"></i> Driver Panel</a>
+            <a href="owner.html" class="menu-item" id="menuOwner" style="display:none;"><i class="fas fa-crown"></i> Owner Panel</a>
+        </div>
+
+        <div class="card glass">
+            <h3><i class="fas fa-map-location-dot"></i> Track Bus</h3>
+
+            <div id="autoTrackInfo" class="info-box">
+                <p><i class="fas fa-ticket"></i> Your Booking: <strong id="autoRouteName">—</strong></p>
+                <p><i class="fas fa-user"></i> Driver: <strong id="autoDriverName">—</strong></p>
+                <p><i class="fas fa-clock"></i> Departure: <span id="autoDeparture">—</span> &nbsp;|&nbsp; Arrival: <span id="autoArrival">—</span></p>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-route"></i> Or select a route (simulation)</label>
+                <select id="trackRouteSelect">
+                    <option value="">— Select Route —</option>
+                </select>
+            </div>
+            <button class="btn-primary" id="startTrackBtn"><i class="fas fa-play"></i> Start Simulation</button>
+
+            <div id="map" class="map-container"></div>
+            <p id="etaTextTrack" class="text-center" style="color:rgba(255,255,255,0.7);"><i class="fas fa-clock"></i> Arrival: — minutes</p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js" type="module"></script>
+    <script>
+        document.getElementById('homeLink').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

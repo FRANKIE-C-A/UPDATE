@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <div class="header-title" id="homeLink">
+                <i class="fas fa-bus"></i> Bus<span style="-webkit-text-fill-color: #ffd700;">Book</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div class="user-badge" id="userBadge" style="display:none;">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userBadgeName">Guest</span>
+                </div>
+                <button class="hamburger" id="hamburgerBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="index.html" class="menu-item"><i class="fas fa-home"></i> Home</a>
+            <a href="login.html" class="menu-item" id="menuLogin"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="#" class="menu-item" id="menuLogout" style="display:none;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <div class="dropdown-divider"></div>
+            <a href="book.html" class="menu-item"><i class="fas fa-ticket"></i> Book</a>
+            <a href="track.html" class="menu-item"><i class="fas fa-map-location-dot"></i> Track</a>
+            <a href="driver.html" class="menu-item" id="menuDriver" style="display:none;"><i class="fas fa-steering-wheel"></i> Driver Panel</a>
+            <a href="owner.html" class="menu-item" id="menuOwner" style="display:none;"><i class="fas fa-crown"></i> Owner Panel</a>
+        </div>
+
+        <div class="card glass">
+            <div class="flex-between flex-wrap">
+                <div>
+                    <h3><i class="fas fa-user-shield"></i> Admin Panel</h3>
+                    <p style="color:rgba(255,255,255,0.5);">Welcome, <span id="adminWelcome">—</span> (<span id="adminCompanyDisplay">—</span>)</p>
+                </div>
+                <button class="btn-secondary" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+
+        <div class="stats-grid" id="adminStats">
+            <div class="stat-card"><i class="fas fa-bus"></i><span class="num" id="adminDrivers">0</span><label>Drivers</label></div>
+            <div class="stat-card"><i class="fas fa-users"></i><span class="num" id="adminPassengers">0</span><label>Passengers</label></div>
+            <div class="stat-card"><i class="fas fa-ticket"></i><span class="num" id="adminBookings">0</span><label>Bookings</label></div>
+            <div class="stat-card"><i class="fas fa-coins"></i><span class="num" id="adminRevenue">₱0</span><label>Revenue</label></div>
+        </div>
+
+        <div class="card glass">
+            <button class="btn-primary" id="toggleDriverFormBtn" style="width:100%;">
+                <i class="fas fa-user-plus"></i> Register a Driver
+            </button>
+            <div id="driverRegFormContainer" style="display:none; margin-top:16px;">
+                <h4>Driver Registration Form</h4>
+                <form id="driverRegForm">
+                    <div class="form-row">
+                        <div class="form-group"><label>Full Name *</label><input id="regFullName" placeholder="Driver full name" required /></div>
+                        <div class="form-group"><label>Address *</label><input id="regAddress" placeholder="Driver address" required /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>License Number *</label><input id="regLicense" placeholder="Driver license" required /></div>
+                        <div class="form-group"><label>Bus Plate *</label><input id="regPlate" placeholder="Plate Number" required /></div>
+                    </div>
+                    <div class="form-group"><label>Bus Type</label>
+                        <select id="regBusType" required>
+                            <option value="aircon">AIRCON</option>
+                            <option value="traditional">TRADITIONAL</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Route Name *</label><input id="routeName" placeholder="e.g. Cebu to Danao" required /></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>From (DMS) *</label><input id="fromCoord" placeholder="10°15'30.3&quot;N 123°49'18.6&quot;E" required /></div>
+                        <div class="form-group"><label>To (DMS) *</label><input id="toCoord" placeholder="10°15'30.6&quot;N 123°49'22.1&quot;E" required /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Fare (₱) *</label><input id="fare" type="number" min="0" placeholder="0" required /></div>
+                        <div class="form-group"><label>Departure Time</label><input id="departureTime" type="time" value="08:00" required /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Conductor Name</label><input id="regConductor" placeholder="Conductor's name" /></div>
+                        <div class="form-group"><label>Bus Capacity</label><input id="regCapacity" type="number" placeholder="Seats" value="12" /></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Access Code (auto‑generated, hashed)</label>
+                        <input id="regSpecialCode" type="text" placeholder="Will be auto‑generated" readonly style="background:rgba(255,255,255,0.05);" />
+                    </div>
+                    <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Register Driver</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card glass">
+            <h4><i class="fas fa-bus"></i> Registered Drivers</h4>
+            <div class="table-wrap"><table><thead><tr><th>Name</th><th>Plate</th><th>Bus Type</th><th>Route</th><th>Fare</th><th>Departure</th><th>Conductor</th><th>Code</th><th>Action</th></tr></thead><tbody id="adminDriversTable"></tbody></table></div>
+        </div>
+
+        <div class="card glass">
+            <h4><i class="fas fa-ticket"></i> All Bookings</h4>
+            <div class="table-wrap"><table><thead><tr><th>Passenger</th><th>Route</th><th>Bus Type</th><th>Fare</th><th>Status</th><th>Time</th><th>OTP</th></tr></thead><tbody id="adminBookingsTable"></tbody></table></div>
+        </div>
+    </div>
+
+    <script src="script.js" type="module"></script>
+    <script>
+        document.getElementById('homeLink').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+        document.getElementById('logoutBtn').addEventListener('click', logoutUser);
+    </script>
+</body>
+</html>

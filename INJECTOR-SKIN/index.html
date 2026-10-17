@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKIN LUA GENERATOR</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 950px;
+            background: rgba(20, 20, 20, 0.85);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            border: 3px solid #00ff00;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #ff3333;
+            font-size: 26px;
+            font-weight: 700;
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+            animation: pulse 2s infinite;
+            margin-bottom: 5px;
+        }
+        
+        @keyframes pulse {
+            0% { text-shadow: 0 0 10px rgba(255, 0, 0, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(255, 0, 0, 0.9); }
+            100% { text-shadow: 0 0 10px rgba(255, 0, 0, 0.5); }
+        }
+        
+        .subtitle {
+            color: #00ff00;
+            font-size: 12px;
+            font-weight: 500;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        
+        .mode-btn {
+            padding: 10px 20px;
+            background: rgba(30, 30, 30, 0.8);
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            min-width: 120px;
+        }
+        
+        .mode-btn.active {
+            background: linear-gradient(to right, #ff3333, #cc0000);
+            color: white;
+            border-color: #ff3333;
+        }
+        
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .input-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .skin-section, .feature-section, .skin-auto-section {
+            width: 100%;
+            display: none;
+        }
+        
+        .skin-section.active, .feature-section.active, .skin-auto-section.active {
+            display: block;
+        }
+        
+        .input-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .input-group {
+            flex: 1;
+            min-width: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .feature-input-group {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .feature-row {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #ff3333;
+            font-size: 14px;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .feature-label {
+            color: #00ff00;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .feature-input-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .feature-input {
+            flex: 1;
+            min-width: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .skin-auto-input {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .skin-auto-row {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .file-upload {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .file-upload-area {
+            width: 100%;
+            padding: 20px;
+            border: 2px dashed #00ff00;
+            border-radius: 8px;
+            background-color: rgba(30, 30, 30, 0.5);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .file-upload-area:hover {
+            border-color: #00cc00;
+            background-color: rgba(40, 40, 40, 0.7);
+        }
+        
+        .file-upload-area.has-file {
+            border-color: #ff9900;
+            background-color: rgba(40, 30, 10, 0.7);
+        }
+        
+        .file-upload-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #00ff00;
+        }
+        
+        .file-name {
+            font-size: 12px;
+            color: #ff9900;
+            margin-top: 5px;
+            word-break: break-all;
+        }
+        
+        .file-info {
+            font-size: 11px;
+            color: #00ff00;
+            margin-top: 5px;
+        }
+        
+        .skin-auto-preview {
+            width: 100%;
+            background-color: rgba(30, 30, 30, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+        
+        .skin-auto-preview-title {
+            color: #ff3333;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            background-color: rgba(30, 30, 30, 0.8);
+            color: #fff;
+            font-size: 14px;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        input[type="text"]::placeholder {
+            color: #aaa;
+            text-align: center;
+        }
+        
+        input[type="text"]:focus {
+            border-color: #00cc00;
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.6);
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .info-text {
+            font-size: 12px;
+            color: #00ff00;
+            margin-top: 6px;
+            text-align: center;
+            line-height: 1.3;
+        }
+        
+        .offset-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            background-color: rgba(30, 30, 30, 0.8);
+            color: #fff;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            min-height: 80px;
+            line-height: 1.4;
+        }
+        
+        .offset-textarea::placeholder {
+            color: #aaa;
+            text-align: center;
+        }
+        
+        .offset-textarea:focus {
+            border-color: #00cc00;
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.6);
+        }
+        
+        .button-row {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .feature-button-row, .skin-auto-button-row {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .gen-btn {
+            flex: 1;
+            padding: 14px;
+            background: linear-gradient(to right, #ff3333, #cc0000);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            max-width: 250px;
+        }
+        
+        .gen-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(to right, #ff4444, #dd0000);
+        }
+        
+        .gen-btn:active {
+            transform: translateY(0);
+        }
+        
+        .output-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .output-box {
+            background-color: rgba(30, 30, 30, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            border: 3px solid #00ff00;
+            display: flex;
+            flex-direction: column;
+            height: 380px;
+            animation: borderGlow 3s infinite;
+            width: 100%;
+        }
+        
+        @keyframes borderGlow {
+            0% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(0, 255, 0, 0.9); }
+            100% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); }
+        }
+        
+        textarea {
+            flex: 1;
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            background-color: rgba(10, 10, 10, 0.9);
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            resize: none;
+            line-height: 1.5;
+        }
+        
+        textarea::placeholder {
+            text-align: center;
+            color: #aaa;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .copy-btn, .clear-btn {
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn {
+            background: linear-gradient(to right, #ff3333, #cc0000);
+        }
+        
+        .clear-btn {
+            background: linear-gradient(to right, #aa0000, #770000);
+        }
+        
+        .copy-btn:hover, .clear-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            padding: 10px 15px;
+            background: linear-gradient(to right, #ff3333, #cc0000);
+            color: white;
+            border-radius: 8px;
+            display: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 8px;
+            }
+            
+            .container {
+                padding: 18px;
+                max-width: 100%;
+            }
+            
+            h1 {
+                font-size: 22px;
+                margin-bottom: 5px;
+            }
+            
+            .subtitle {
+                font-size: 11px;
+            }
+            
+            .mode-selector {
+                gap: 8px;
+            }
+            
+            .mode-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+                min-width: 100px;
+            }
+            
+            .skin-auto-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .input-row, .feature-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .input-group, .feature-input, .file-upload {
+                flex: 1 1 100%;
+                min-width: 100%;
+            }
+            
+            .button-row, .feature-button-row, .skin-auto-button-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .output-box {
+                height: 320px;
+                padding: 15px;
+            }
+            
+            textarea {
+                padding: 12px;
+                font-size: 12px;
+            }
+            
+            .skin-auto-preview {
+                max-height: 150px;
+                font-size: 10px;
+            }
+            
+            .action-buttons {
+                gap: 8px;
+                margin-top: 10px;
+            }
+            
+            .copy-btn, .clear-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+            
+            .gen-btn {
+                max-width: 100%;
+                padding: 12px;
+                font-size: 13px;
+            }
+            
+            .input-section {
+                gap: 12px;
+                margin-bottom: 15px;
+            }
+            
+            .info-text {
+                font-size: 11px;
+            }
+            
+            .offset-textarea {
+                min-height: 60px;
+                font-size: 11px;
+            }
+        }
+
+        /* Small mobile devices */
+        @media (max-width: 380px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+            
+            .subtitle {
+                font-size: 10px;
+            }
+            
+            .mode-btn {
+                padding: 6px 10px;
+                font-size: 11px;
+                min-width: 90px;
+            }
+            
+            .output-box {
+                height: 280px;
+            }
+            
+            textarea {
+                font-size: 11px;
+            }
+            
+            .skin-auto-preview {
+                max-height: 120px;
+                font-size: 9px;
+            }
+            
+            .copy-btn, .clear-btn {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+            
+            .offset-textarea {
+                min-height: 50px;
+                font-size: 10px;
+            }
+        }
+
+        /* Desktop-specific adjustments */
+        @media (min-width: 769px) {
+            .container {
+                max-width: 950px;
+            }
+            
+            .output-box {
+                height: 420px;
+            }
+            
+            .input-group {
+                min-width: 200px;
+            }
+            
+            .feature-input {
+                min-width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>SKIN LUA GENERATOR</h1>
+            <div class="subtitle">DEVLOPED BY BOSS FRANK</div>
+        </div>
+        
+        <div class="mode-selector">
+            <button class="mode-btn active" id="skinModeBtn">SKIN FUNCTION</button>
+            <button class="mode-btn" id="featureModeBtn">FEATURE FUNC</button>
+            <button class="mode-btn" id="skinAutoBtn">SKIN AUTO</button>
+        </div>
+        
+        <!-- SKIN SECTION -->
+        <div class="input-section">
+            <div class="skin-section active">
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="txt1">GUN/FEATURE ID</label>
+                        <input type="text" id="txt1" placeholder="NAME1,NAME2,NAME3">
+                        <div class="info-text">Separate multiple with commas ( , )</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="txt2">CPP FILE NAMES</label>
+                        <input type="text" id="txt2" placeholder="Optional - leave blank for default">
+                        <div class="info-text">Separate with commas ( , )</div>
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="gunName">NAMES OF GUNS</label>
+                        <input type="text" id="gunName" placeholder="GUN1,GUN2,GUN3">
+                        <div class="info-text">Separate with commas ( , )</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="fileName">FILE PATH</label>
+                        <input type="text" id="fileName" placeholder="Optional">
+                        <div class="info-text">Default: /lib/arm64-v8a/FRANKSKIN/</div>
+                    </div>
+                </div>
+                
+                <div class="button-row">
+                    <button class="gen-btn" id="generateBtn1">GENERATE GUN FUNCTIONS</button>
+                    <button class="gen-btn" id="generateBtn2">GENERATE BUTTON FUNCTIONS</button>
+                </div>
+            </div>
+            
+            <!-- FEATURE SECTION -->
+            <div class="feature-section">
+                <div class="feature-input-group">
+                    <label>NAMES</label>
+                    <input type="text" id="featureName" placeholder="FEATURE1,FEATURE2,FEATURE3">
+                    <div class="info-text">Separate multiple with commas ( , ) - toast will be auto-generated in UPPERCASE</div>
+                </div>
+                
+                <div class="feature-input-group">
+                    <label>ID</label>
+                    <input type="text" id="featureID" placeholder="ID1,ID2,ID3">
+                    <div class="info-text">Separate with commas ( , )</div>
+                </div>
+                
+                <div class="feature-row">
+                    <div class="feature-input">
+                        <label>OFFSET ON</label>
+                        <textarea class="offset-textarea" id="offsetOn" placeholder="Separate multiple offset patches with /"></textarea>
+                        <div class="info-text">Separate multiple offset patches with / Leave empty if not needed</div>
+                    </div>
+                    <div class="feature-input">
+                        <label>OFFSET OFF</label>
+                        <textarea class="offset-textarea" id="offsetOff" placeholder="Separate multiple offset patches with /"></textarea>
+                        <div class="info-text">Separate multiple offset patches with / Leave empty if not needed</div>
+                    </div>
+                </div>
+                
+                <div class="feature-button-row">
+                    <button class="gen-btn" id="generateFeatureFunc">GENERATE FEATURE FUNCTIONS</button>
+                    <button class="gen-btn" id="generateFeatureBtn">GENERATE BUTTON FUNCTIONS</button>
+                </div>
+            </div>
+            
+            <!-- SKIN AUTO SECTION -->
+            <div class="skin-auto-section">
+                <div class="skin-auto-row">
+                    <div class="file-upload">
+                        <label>SKIN FILE</label>
+                        <div class="file-upload-area" id="skinFileUpload">
+                            <div class="file-upload-icon">📁</div>
+                            <div>Click to upload skin file</div>
+                            <div class="file-info">Upload .lua or .txt file containing skin functions</div>
+                            <div class="file-name" id="skinFileName"></div>
+                        </div>
+                        <input type="file" id="skinFileInput" accept=".lua,.txt">
+                        <div class="info-text">File should contain functions like: c26.OnCheckedChangeListener()</div>
+                    </div>
+                    
+                    <div class="file-upload">
+                        <label>FLOATING FILE</label>
+                        <div class="file-upload-area" id="floatFileUpload">
+                            <div class="file-upload-icon">📁</div>
+                            <div>Click to upload floating file</div>
+                            <div class="file-info">Upload .lua or .txt file containing button layouts</div>
+                            <div class="file-name" id="floatFileName"></div>
+                        </div>
+                        <input type="file" id="floatFileInput" accept=".lua,.txt">
+                        <div class="info-text">File should contain button layouts like: CheckBox with id="..."</div>
+                    </div>
+                </div>
+                
+                <div class="skin-auto-input">
+                    <label>PREVIEW</label>
+                    <div class="skin-auto-preview" id="skinAutoPreview">
+                        <div class="skin-auto-preview-title">Upload files to see preview</div>
+                        <div id="skinPreviewContent" style="display: none;"></div>
+                        <div id="floatPreviewContent" style="display: none;"></div>
+                    </div>
+                    <div class="info-text">Files will be automatically scanned for IDs and button layouts</div>
+                </div>
+                
+                <div class="skin-auto-button-row">
+                    <button class="gen-btn" id="generateSkinAutoFunc">GENERATE FUNCTION</button>
+                    <button class="gen-btn" id="generateSkinAutoBtn">GENERATE BUTTON FUNCTION</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="output-section">
+            <div class="output-box">
+                <textarea id="output" readonly placeholder="Generated code will appear here"></textarea>
+                <div class="action-buttons">
+                    <button class="copy-btn" id="copyBtn">Copy All</button>
+                    <button class="clear-btn" id="clearBtn">Clear All</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">Copied to clipboard!</div>
+
+    <script>
+        // Font conversion mapping for button text
+        const fontMap = {
+            'a': 'ᴀ', 'b': 'ʙ', 'c': 'ᴄ', 'd': 'ᴅ', 'e': 'ᴇ',
+            'f': 'ꜰ', 'g': 'ɢ', 'h': 'ʜ', 'i': 'ɪ', 'j': 'ᴊ',
+            'k': 'ᴋ', 'l': 'ʟ', 'm': 'ᴍ', 'n': 'ɴ', 'o': 'ᴏ',
+            'p': 'ᴘ', 'q': 'ǫ', 'r': 'ʀ', 's': 'ꜱ', 't': 'ᴛ',
+            'u': 'ᴜ', 'v': 'ᴠ', 'w': 'ᴡ', 'x': 'x', 'y': 'ʏ', 'z': 'ᴢ',
+            'A': 'ᴀ', 'B': 'ʙ', 'C': 'ᴄ', 'D': 'ᴅ', 'E': 'ᴇ',
+            'F': 'ꜰ', 'G': 'ɢ', 'H': 'ʜ', 'I': 'ɪ', 'J': 'ᴊ',
+            'K': 'ᴋ', 'L': 'ʟ', 'M': 'ᴍ', 'N': 'ɴ', 'O': 'ᴏ',
+            'P': 'ᴘ', 'Q': 'ǫ', 'R': 'ʀ', 'S': 'ꜱ', 'T': 'ᴛ',
+            'U': 'ᴜ', 'V': 'ᴠ', 'W': 'ᴡ', 'X': 'x', 'Y': 'ʏ', 'Z': 'ᴢ',
+            '0': '0', '1': '1', '2': '2', '3': '3', '4': '4',
+            '5': '5', '6': '6', '7': '7', '8': '8', '9': '9',
+            ' ': ' ', '-': '-', '_': '_', '.': '.', ',': ','
+        };
+
+        // Function to convert to styled font (for button text)
+        function convertToStyledFont(text) {
+            return text.split('').map(char => fontMap[char] || char).join('');
+        }
+
+        // Function to generate toast from feature name (normal font, uppercase)
+        function generateToastFromName(name) {
+            // Convert to uppercase for the toast message
+            return name.toUpperCase();
+        }
+
+        // Helper function to parse comma-separated values
+        function parseCSV(input) {
+            return input.split(',')
+                .map(item => item.trim())
+                .filter(item => item.length > 0);
+        }
+
+        // Helper function to parse offset patches separated by /
+        function parseOffsetPatches(input) {
+            if (!input.trim()) return [];
+            
+            // Split by / and clean up each patch
+            return input.split('/')
+                .map(patch => patch.trim())
+                .filter(patch => patch.length > 0);
+        }
+
+        // Helper function to create feature data
+        function createFeatureData(names, ids, toasts, offsetsOn, offsetsOff) {
+            const result = [];
+            const maxLength = Math.max(names.length, ids.length);
+            
+            for (let i = 0; i < maxLength; i++) {
+                const feature = {
+                    id: ids[i] || (ids.length > 0 ? ids[ids.length - 1] : ''),
+                    name: names[i] || (names.length > 0 ? names[names.length - 1] : ''),
+                    toast: toasts[i] || (toasts.length > 0 ? toasts[toasts.length - 1] : ''),
+                    offsetOn: offsetsOn[i] || (offsetsOn.length > 0 ? offsetsOn[offsetsOn.length - 1] : ''),
+                    offsetOff: offsetsOff[i] || (offsetsOff.length > 0 ? offsetsOff[offsetsOff.length - 1] : '')
+                };
+                
+                // Ensure we have at least an ID
+                if (feature.id || i < ids.length) {
+                    result.push(feature);
+                }
+            }
+            
+            return result;
+        }
+
+        // Variables to store uploaded file contents
+        let skinFileContent = '';
+        let floatFileContent = '';
+
+        // File upload handlers
+        document.getElementById('skinFileUpload').addEventListener('click', function() {
+            document.getElementById('skinFileInput').click();
+        });
+
+        document.getElementById('floatFileUpload').addEventListener('click', function() {
+            document.getElementById('floatFileInput').click();
+        });
+
+        document.getElementById('skinFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    skinFileContent = e.target.result;
+                    document.getElementById('skinFileName').textContent = file.name;
+                    document.getElementById('skinFileUpload').classList.add('has-file');
+                    updatePreview();
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        document.getElementById('floatFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    floatFileContent = e.target.result;
+                    document.getElementById('floatFileName').textContent = file.name;
+                    document.getElementById('floatFileUpload').classList.add('has-file');
+                    updatePreview();
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // Update preview function
+        function updatePreview() {
+            const preview = document.getElementById('skinAutoPreview');
+            const skinContent = document.getElementById('skinPreviewContent');
+            const floatContent = document.getElementById('floatPreviewContent');
+            
+            if (!skinFileContent && !floatFileContent) {
+                preview.innerHTML = '<div class="skin-auto-preview-title">Upload files to see preview</div>';
+                return;
+            }
+            
+            let previewHTML = '';
+            
+            if (skinFileContent) {
+                const extractedData = extractSkinData(skinFileContent);
+                previewHTML += '<div class="skin-auto-preview-title">SKIN FILE DATA</div>';
+                previewHTML += `<div style="color:#00ff00; margin-bottom:10px;">Found ${extractedData.length} function(s)</div>`;
+                
+                extractedData.forEach(item => {
+                    previewHTML += `<div style="color:#ffffff; margin-bottom:5px; font-family: monospace;">ID: <span style="color:#ff9900">${item.id}</span> | Patch: <span style="color:#00ccff">${item.patch}</span></div>`;
+                });
+            }
+            
+            if (floatFileContent) {
+                const extractedButtons = extractButtonData(floatFileContent);
+                previewHTML += '<div class="skin-auto-preview-title" style="margin-top:15px;">FLOATING FILE DATA</div>';
+                previewHTML += `<div style="color:#00ff00; margin-bottom:10px;">Found ${extractedButtons.length} button(s)</div>`;
+                
+                extractedButtons.forEach(button => {
+                    previewHTML += `<div style="color:#ffffff; margin-bottom:5px; font-family: monospace;">ID: <span style="color:#ff9900">${button.id}</span> | Text: <span style="color:#ff66cc">${button.text}</span></div>`;
+                });
+            }
+            
+            preview.innerHTML = previewHTML;
+        }
+
+        // Extract data from skin file
+        function extractSkinData(content) {
+            const extracted = [];
+            
+            // Look for function patterns like: c26.OnCheckedChangeListener()
+            const functionRegex = /(\w+)\.OnCheckedChangeListener\(\)/g;
+            const patchRegex = /patch\("([^"]+)"\)/g;
+            
+            // Find all function definitions
+            const functionMatches = [...content.matchAll(functionRegex)];
+            
+            functionMatches.forEach(match => {
+                const id = match[1];
+                
+                // Find the patch command in the function body
+                // Get the section after this function definition
+                const startIndex = match.index;
+                const endIndex = content.indexOf('end', startIndex);
+                const functionBody = content.substring(startIndex, endIndex + 3);
+                
+                // Look for patch command in this function body
+                const patchMatch = functionBody.match(patchRegex);
+                if (patchMatch) {
+                    const patch = patchMatch[0].match(/patch\("([^"]+)"\)/)[1];
+                    extracted.push({ id, patch });
+                }
+            });
+            
+            return extracted;
+        }
+
+        // Extract data from floating file
+        function extractButtonData(content) {
+            const extracted = [];
+            
+            // Look for CheckBox patterns with id and text
+            // Pattern: CheckBox; ... text="..."; id="..."; ...
+            const lines = content.split('\n');
+            let inCheckbox = false;
+            let currentButton = {};
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                
+                // Start of a CheckBox
+                if (line.includes('CheckBox;')) {
+                    inCheckbox = true;
+                    currentButton = {};
+                }
+                
+                // Look for id and text in the CheckBox section
+                if (inCheckbox) {
+                    // Extract id
+                    const idMatch = line.match(/id\s*=\s*"([^"]+)"/);
+                    if (idMatch) {
+                        currentButton.id = idMatch[1];
+                    }
+                    
+                    // Extract text
+                    const textMatch = line.match(/text\s*=\s*"([^"]+)"/);
+                    if (textMatch) {
+                        currentButton.text = textMatch[1];
+                    }
+                    
+                    // End of CheckBox (semicolon at end of line or closing brace)
+                    if (line.includes('};') || (line.endsWith(';') && !line.includes('CheckBox;'))) {
+                        if (currentButton.id && currentButton.text) {
+                            extracted.push({ ...currentButton });
+                        }
+                        inCheckbox = false;
+                    }
+                }
+            }
+            
+            return extracted;
+        }
+
+        // Generate function from skin file
+        document.getElementById('generateSkinAutoFunc').addEventListener('click', function() {
+            if (!skinFileContent) {
+                alert('Please upload a skin file first');
+                return;
+            }
+            
+            const extractedData = extractSkinData(skinFileContent);
+            
+            if (extractedData.length === 0) {
+                alert('No skin functions found in the uploaded file');
+                return;
+            }
+            
+            let allOutput = "";
+            
+            extractedData.forEach((item, index) => {
+                const functionCode = `CircleButton(${item.id},0x80000000,18,0xFFFF0000)
+${item.id}.ButtonDrawable.setColorFilter(PorterDuffColorFilter(0xFFFF0000, PorterDuff.Mode.SRC_ATOP))
+function ${item.id}.OnCheckedChangeListener()
+  if ${item.id}.checked then
+    vibrator = activity.getSystemService(Context.VIBRATOR_SERVICE)
+    vibrator.vibrate(({100, 1000}), -1)
+    CircleButton(${item.id},0x29000000,18,0xFF00FF00)
+    patch("${item.patch} 1")
+    idkcstmToast("SUCCESS")
+   else
+    vibrator = activity.getSystemService(Context.VIBRATOR_SERVICE)
+    vibrator.vibrate(({100, 1000}), -1)
+    CircleButton(${item.id},0x80000000,18,0xFFFF0000)
+  end
+end`;
+                
+                allOutput += functionCode;
+                
+                // Add separation between functions (except after the last one)
+                if (index < extractedData.length - 1) {
+                    allOutput += "\n\n\n";
+                }
+            });
+            
+            document.getElementById('output').value = allOutput;
+        });
+
+        // Generate button function from floating file
+        document.getElementById('generateSkinAutoBtn').addEventListener('click', function() {
+            if (!floatFileContent) {
+                alert('Please upload a floating file first');
+                return;
+            }
+            
+            const extractedButtons = extractButtonData(floatFileContent);
+            
+            if (extractedButtons.length === 0) {
+                alert('No button layouts found in the uploaded file');
+                return;
+            }
+            
+            let allOutput = "";
+            
+            extractedButtons.forEach((button, index) => {
+                const styledText = convertToStyledFont(button.text);
+                
+                const buttonCode = `{
+  CheckBox,
+  layout_width = "fill",
+  layout_height = "wrap",
+  textColor = "0xBFFFFF00",
+  text = "${styledText}",--${button.text}
+  layout_marginBottom="5dp";
+  id = "${button.id}",
+  textSize = "12dp"
+};`;
+                
+                allOutput += buttonCode;
+                
+                // Add separation between buttons (except after the last one)
+                if (index < extractedButtons.length - 1) {
+                    allOutput += "\n\n\n";
+                }
+            });
+            
+            document.getElementById('output').value = allOutput;
+        });
+
+        // Mode switching
+        document.getElementById('skinModeBtn').addEventListener('click', function() {
+            document.getElementById('skinModeBtn').classList.add('active');
+            document.getElementById('featureModeBtn').classList.remove('active');
+            document.getElementById('skinAutoBtn').classList.remove('active');
+            document.querySelector('.skin-section').classList.add('active');
+            document.querySelector('.feature-section').classList.remove('active');
+            document.querySelector('.skin-auto-section').classList.remove('active');
+        });
+
+        document.getElementById('featureModeBtn').addEventListener('click', function() {
+            document.getElementById('featureModeBtn').classList.add('active');
+            document.getElementById('skinModeBtn').classList.remove('active');
+            document.getElementById('skinAutoBtn').classList.remove('active');
+            document.querySelector('.feature-section').classList.add('active');
+            document.querySelector('.skin-section').classList.remove('active');
+            document.querySelector('.skin-auto-section').classList.remove('active');
+        });
+
+        document.getElementById('skinAutoBtn').addEventListener('click', function() {
+            document.getElementById('skinAutoBtn').classList.add('active');
+            document.getElementById('skinModeBtn').classList.remove('active');
+            document.getElementById('featureModeBtn').classList.remove('active');
+            document.querySelector('.skin-auto-section').classList.add('active');
+            document.querySelector('.skin-section').classList.remove('active');
+            document.querySelector('.feature-section').classList.remove('active');
+        });
+
+        // Generate GUN FUNCTIONS (multiple) - SKIN MODE
+        document.getElementById('generateBtn1').addEventListener('click', function() {
+            const txt1Input = document.getElementById('txt1').value;
+            const txt2Input = document.getElementById('txt2').value;
+            const fileNameInput = document.getElementById('fileName').value;
+            
+            if (!txt1Input) {
+                alert('Please enter at least one GUN/FEATURE ID');
+                return;
+            }
+            
+            const ids = parseCSV(txt1Input);
+            
+            // Use default base path
+            const defaultBasePath = "/lib/arm64-v8a/FRANKSKIN/";
+            let basePath = fileNameInput.trim() || defaultBasePath;
+            
+            // Ensure base path ends with /
+            if (!basePath.endsWith('/')) {
+                basePath += '/';
+            }
+            
+            // Parse file names
+            let fileNames = parseCSV(txt2Input);
+            
+            // If no file names provided, use IDs as file names
+            if (fileNames.length === 0) {
+                fileNames = [...ids];
+            }
+            // If only one file name provided, use it for all
+            else if (fileNames.length === 1) {
+                fileNames = Array(ids.length).fill(fileNames[0]);
+            }
+            // If fewer file names than IDs, fill remaining with the last file name
+            else if (fileNames.length < ids.length) {
+                const lastName = fileNames[fileNames.length - 1];
+                while (fileNames.length < ids.length) {
+                    fileNames.push(lastName);
+                }
+            }
+            
+            let allOutput = "";
+            
+            // Generate function for each ID
+            ids.forEach((id, index) => {
+                const fileName = fileNames[index] || fileNames[fileNames.length - 1];
+                const fullPath = basePath + fileName;
+                
+                const functionCode = `CircleButton(${id},0x80000000,18,0xFFFF0000)
+${id}.ButtonDrawable.setColorFilter(PorterDuffColorFilter(0xFFFF0000, PorterDuff.Mode.SRC_ATOP))
+function ${id}.OnCheckedChangeListener()
+  if ${id}.checked then
+    vibrator = activity.getSystemService(Context.VIBRATOR_SERVICE)
+    vibrator.vibrate(({100, 1000}), -1)
+    CircleButton(${id},0x29000000,18,0xFF00FF00)
+    patch("${fullPath} 1")
+    idkcstmToast("SUCCESS")
+   else
+    vibrator = activity.getSystemService(Context.VIBRATOR_SERVICE)
+    vibrator.vibrate(({100, 1000}), -1)
+    CircleButton(${id},0x80000000,18,0xFFFF0000)
+  end
+end`;
+                
+                allOutput += functionCode;
+                
+                // Add separation between functions (except after the last one)
+                if (index < ids.length - 1) {
+                    allOutput += "\n\n\n";
+                }
+            });
+            
+            document.getElementById('output').value = allOutput;
+        });
+        
+        // Generate BUTTON FUNCTIONS (multiple) - SKIN MODE
+        document.getElementById('generateBtn2').addEventListener('click', function() {
+            const txt1Input = document.getElementById('txt1').value;
+            const gunNameInput = document.getElementById('gunName').value;
+            
+            if (!txt1Input || !gunNameInput) {
+                alert('Please enter both GUN/FEATURE IDs and NAMES OF GUNS');
+                return;
+            }
+            
+            const ids = parseCSV(txt1Input);
+            const gunNames = parseCSV(gunNameInput);
+            
+            // If fewer gun names than IDs, fill remaining with the last name
+            if (gunNames.length < ids.length) {
+                const lastName = gunNames[gunNames.length - 1];
+                while (gunNames.length < ids.length) {
+                    gunNames.push(lastName);
+                }
+            }
+            
+            let allOutput = "";
+            
+            // Generate button for each ID and gun name
+            ids.forEach((id, index) => {
+                const gunName = gunNames[index] || gunNames[gunNames.length - 1];
+                const styledGunName = convertToStyledFont(gunName);
+                
+                const buttonCode = `{
+  CheckBox,
+  layout_width="fill",
+  layout_height = "wrap",
+  textColor = "0xBFFFFF00",
+  text = "${styledGunName}",
+  layout_gravity = "center",
+  id = "${id}",
+  textSize = "12dp"
+};`;
+                
+                allOutput += buttonCode;
+                
+                // Add separation between buttons (except after the last one)
+                if (index < ids.length - 1) {
+                    allOutput += "\n\n\n";
+                }
+            });
+            
+            document.getElementById('output').value = allOutput;
+        });
+        
+        // Generate MULTIPLE FEATURE FUNCTIONS
+        document.getElementById('generateFeatureFunc').addEventListener('click', function() {
+            const names = document.getElementById('featureName').value;
+            const ids = document.getElementById('featureID').value;
+            const offsetsOn = document.getElementById('offsetOn').value;
+            const offsetsOff = document.getElementById('offsetOff').value;
+            
+            if (!names || !ids) {
+                alert('Please fill in at least Names and IDs fields');
+                return;
+            }
+            
+            const nameArray = parseCSV(names);
+            const idArray = parseCSV(ids);
+            const offsetOnArray = parseOffsetPatches(offsetsOn);
+            const offsetOffArray = parseOffsetPatches(offsetsOff);
+            
+            // Generate toast array from names
+            const toastArray = nameArray.map(name => generateToastFromName(name));
+            
+            // Create feature data
+            const featureData = createFeatureData(nameArray, idArray, toastArray, offsetOnArray, offsetOffArray);
+            
+            let allOutput = "";
+            
+            // Generate function for each feature
+            featureData.forEach((feature, index) => {
+                if (!feature.id) {
+                    console.error('No ID for feature at index', index, feature);
+                    return;
+                }
+                
+                const functionCode = `CircleButton(${feature.id},0x80000000,18,0xFFFF0000)
+${feature.id}.ButtonDrawable.setColorFilter(PorterDuffColorFilter(0xFFFF0000, PorterDuff.Mode.SRC_ATOP))
+function ${feature.id}.OnCheckedChangeListener()
+  if ${feature.id}.checked then
+    antiC4droid()
+    BossFAntihook()
+    vibrator = activity.getSystemService(Context.VIBRATOR_SERVICE)
+    vibrator.vibrate(({100, 2000}), -1)
+    
+${feature.offsetOn || ''}
+
+CircleButton(${feature.id},0x29000000,18,0xFF00FF00)
+    idkcstmToast("${feature.toast} : ACTIVATED 🟢")
+   else
+    vibrator = activity.getSystemService(Context.VIBRATOR_SERVICE)
+    vibrator.vibrate(({100, 10000}), -1)
+    
+    ${feature.offsetOff || ''}
+    
+    idkcstmToast("${feature.toast} : DEACTIVATED 🔴")
+    CircleButton(${feature.id},0x80000000,18,0xFFFF0000)
+  end
+end`;
+                
+                allOutput += functionCode;
+                
+                // Add separation between functions (except after the last one)
+                if (index < featureData.length - 1) {
+                    allOutput += "\n\n\n";
+                }
+            });
+            
+            document.getElementById('output').value = allOutput;
+        });
+        
+        // Generate MULTIPLE FEATURE BUTTON FUNCTIONS
+        document.getElementById('generateFeatureBtn').addEventListener('click', function() {
+            const names = document.getElementById('featureName').value;
+            const ids = document.getElementById('featureID').value;
+            
+            if (!names || !ids) {
+                alert('Please fill in Names and IDs fields');
+                return;
+            }
+            
+            const nameArray = parseCSV(names);
+            const idArray = parseCSV(ids);
+            
+            let allOutput = "";
+            
+            // Generate button for each feature
+            idArray.forEach((id, index) => {
+                const name = nameArray[index] || (nameArray.length > 0 ? nameArray[nameArray.length - 1] : 'FEATURE');
+                const styledName = convertToStyledFont(name);
+                
+                const buttonCode = `{
+  CheckBox,
+  layout_width = "fill",
+  layout_height = "wrap",
+  textColor = "0xBFFFFF00",
+  text = "${styledName}",--${name}
+  layout_marginBottom="5dp";
+  id = "${id}",
+  textSize = "12dp"
+};`;
+                
+                allOutput += buttonCode;
+                
+                // Add separation between buttons (except after the last one)
+                if (index < idArray.length - 1) {
+                    allOutput += "\n\n\n";
+                }
+            });
+            
+            document.getElementById('output').value = allOutput;
+        });
+        
+        // Copy button functionality
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            const textarea = document.getElementById('output');
+            
+            if (textarea.value) {
+                textarea.select();
+                document.execCommand('copy');
+                
+                // Show notification
+                const notification = document.getElementById('notification');
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 2000);
+            } else {
+                alert('No text to copy');
+            }
+        });
+        
+        // Clear button functionality
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            // Clear skin mode inputs
+            document.getElementById('txt1').value = '';
+            document.getElementById('txt2').value = '';
+            document.getElementById('gunName').value = '';
+            document.getElementById('fileName').value = '';
+            
+            // Clear feature mode inputs
+            document.getElementById('featureName').value = '';
+            document.getElementById('featureID').value = '';
+            document.getElementById('offsetOn').value = '';
+            document.getElementById('offsetOff').value = '';
+            
+            // Clear skin auto inputs
+            document.getElementById('skinFileInput').value = '';
+            document.getElementById('floatFileInput').value = '';
+            document.getElementById('skinFileName').textContent = '';
+            document.getElementById('floatFileName').textContent = '';
+            document.getElementById('skinFileUpload').classList.remove('has-file');
+            document.getElementById('floatFileUpload').classList.remove('has-file');
+            document.getElementById('skinAutoPreview').innerHTML = '<div class="skin-auto-preview-title">Upload files to see preview</div>';
+            skinFileContent = '';
+            floatFileContent = '';
+            
+            // Clear output
+            document.getElementById('output').value = '';
+        });
+    </script>
+</body>
+</html>
